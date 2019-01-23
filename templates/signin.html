@@ -6,6 +6,10 @@
   <body>
     <h1>This is the home page<h1>
 
+    {% if account_creation %}
+        <p>{{ account_creation }}</p>
+    {% endif %}
+
     <form action="{{ url_for('handle_signin') }}" method='post'>
         <lable for="signup_username">Username</lable>
         <input type='text' name='signin_username'>
@@ -20,6 +24,6 @@
         <p>{{ error_message }}</p>
     {% endif %}
 
-    <p>Are you a new user? <a href="signup.html">Click here to create an account</a>
+    <p>Are you a new user? <a href="{{ url_for("handle_signup") }}">Click here to create an account</a>
   </body>
 </html>

@@ -1,0 +1,15 @@
+create database subhub;
+create table users (
+	username varchar(50),
+    password varchar(50));
+
+insert into users (username, password) values ("kevin", "kevin11");
+
+create table kevin (
+	sub_name char(100),
+    sub_price decimal(9,2),
+    sub_purchase_date date,
+    sub_renewal_date int);
+
+insert into Kevin (sub_name, sub_price, sub_purchase_date, sub_renewal_date)
+values ("Chegg.com", 15.99, "2019-01-10", 10);

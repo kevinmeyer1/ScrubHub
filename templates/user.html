@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sign In</title>
+  </head>
+  <body>
+    <h1>This is the user page</h1>
+
+    <table>
+        <tr>
+            <th>Subscription Name</th>
+            <th>Price per Month</th>
+            <th>Purchase Date</th>
+            <th>Renewal Date</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <th>{{ row[0] }}</th>
+            <th>{{ row[1] }}</th>
+            <th>{{ row[2] }}</th>
+            <th>{{ row[3] }}</th>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+  </body>
+</html>
+
+<!--
+
+  -->
