@@ -48,7 +48,7 @@ def handle_signup():
         cur.execute("INSERT INTO users (username, password) VALUES (\"{}\", \"{}\");".format(username, password))
         conn.commit()
 
-        # TODO: create table named what the username is, better way to do this?
+        cur.execute('CREATE TABLE {} (sub_name char(100), sub_price decimal(9,2), sub_purhcase_date date, sub_renewal_date int)'.format(username))
 
         #send user back to signin page
         return render_template('signin.html', account_creation="Account successfully created.")
