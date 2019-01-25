@@ -13,6 +13,7 @@ mysql_config = {
 
 @app.route('/')
 def home():
+    session['logged_in'] = False
     return render_template('signin.html')
 
 @app.route('/handle_signin',  methods=['POST', 'GET'])
@@ -27,6 +28,7 @@ def handle_signin():
 
         if cur.fetchone():
             session['username'] = username
+            session['logged_in'] = True
             return redirect(url_for('user_data'))
         else:
             return render_template('signin.html', error_message="Incorrect login credentials.")
@@ -56,20 +58,20 @@ def handle_signup():
 
 @app.route('/user', methods=['POST', 'GET'])
 def user_data():
-    if session.get('username') is not None:
+    if session['logged_in'] == False:
         return redirect(url_for('handle_signin'))
 
     conn = mysql.connector.connect(**mysql_config)
     cur = conn.cursor()
-    cur.execute("SELECT * FROM {};".format(session.get('username')))
+    cur.execute("SELECT * FROM {};".format(session['username']))
     data = cur.fetchall()
 
     #sends all user data to the user.html page
-    return render_template('user.html', data=data, username=session.get('username'))
+    return render_template('user.html', data=data, username=session['username'])
 
 @app.route('/add_subscription', methods=['POST', 'GET'])
 def add_subscription():
-    if session.get('username') is not None:
+    if session['logged_in'] == False:
         return redirect(url_for('handle_signin'))
 
     if request.method == 'POST':
@@ -85,16 +87,17 @@ def add_subscription():
         conn = mysql.connector.connect(**mysql_config)
         cur = conn.cursor()
         cur.execute("INSERT INTO {} (sub_name, sub_price, sub_purchase_date, sub_renewal_date) VALUES (\"{}\", {}, \"{}\", {});"
-            .format(session.get('username'), sub_name, sub_price, sub_purchase_date, sub_renewal_date))
+            .format(session['username'], sub_name, sub_price, sub_purchase_date, sub_renewal_date))
         conn.commit()
 
-        return redirect(url_for('user_data', username=session.get('username')))
+        return redirect(url_for('user_data', username=session['username']))
     else:
-        return render_template('add_subscription.html', username=session.get('username'))
+        return render_template('add_subscription.html', username=session['username'])
 
 @app.route('/logout')
 def logout():
     session.pop('username')
+    session['logged_in'] = False
     return redirect(url_for('handle_signin'))
 
 @app.errorhandler(404)
