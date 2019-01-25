@@ -33,7 +33,3 @@ Go to your web browser and go to 'localhost:5000' or what ever port the flask ou
 Sign in with what ever user you created (default is Kevin kevin11 as per the database.txt thing)
 
 it should pop up with one entry being chegg and some other information
-
-## Comments
-
-Thats the basic bare bones functionality of the website. Theres no CSS and the html is extremely ugly. You can sign up and itll create a new user and a new table for that user however there wont be any data in it unless you add it through mysql workbench. Theres a tiny bit of error handling but not a log so I'm sure you can probably break it. If it does break, CTRL+c the console and just run 'flask run' again then itll start.

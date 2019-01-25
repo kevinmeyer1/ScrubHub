@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import mysql.connector
 
 app = Flask(__name__)
+app.secret_key = 'some secret key?' #what do i do for this?
 
 #Variables
 mysql_config = {
@@ -10,15 +11,12 @@ mysql_config = {
     'host': 'localhost',
     'database': 'SubHub'}
 
-signed_in = False
-
 @app.route('/')
 def home():
     return render_template('signin.html')
 
 @app.route('/handle_signin',  methods=['POST', 'GET'])
 def handle_signin():
-    global signed_in
     if request.method == 'POST':
         username = request.form['signin_username']
         password = request.form['signin_password']
@@ -28,8 +26,8 @@ def handle_signin():
         cur.execute("SELECT * FROM users WHERE username=\"{}\" AND password=\"{}\";".format(username, password))
 
         if cur.fetchone():
-            signed_in = True
-            return redirect(url_for('user_data', username=username))
+            session['username'] = username
+            return redirect(url_for('user_data'))
         else:
             return render_template('signin.html', error_message="Incorrect login credentials.")
     else:
@@ -48,7 +46,7 @@ def handle_signup():
         cur.execute("INSERT INTO users (username, password) VALUES (\"{}\", \"{}\");".format(username, password))
         conn.commit()
 
-        cur.execute('CREATE TABLE {} (sub_name char(100), sub_price decimal(9,2), sub_purhcase_date date, sub_renewal_date int)'.format(username))
+        cur.execute('CREATE TABLE {} (sub_name char(100), sub_price decimal(9,2), sub_purchase_date date, sub_renewal_date int)'.format(username))
 
         #send user back to signin page
         return render_template('signin.html', account_creation="Account successfully created.")
@@ -56,15 +54,49 @@ def handle_signup():
         #signup page is served when getting handle_signup
         return render_template('signup.html')
 
-@app.route('/user/<username>', methods=['POST', 'GET'])
-def user_data(username):
-    if signed_in == False:
+@app.route('/user', methods=['POST', 'GET'])
+def user_data():
+    if session.get('username') is not None:
         return redirect(url_for('handle_signin'))
 
     conn = mysql.connector.connect(**mysql_config)
     cur = conn.cursor()
-    cur.execute("SELECT * FROM {};".format(username))
+    cur.execute("SELECT * FROM {};".format(session.get('username')))
     data = cur.fetchall()
 
     #sends all user data to the user.html page
-    return render_template('user.html', data=data)
+    return render_template('user.html', data=data, username=session.get('username'))
+
+@app.route('/add_subscription', methods=['POST', 'GET'])
+def add_subscription():
+    if session.get('username') is not None:
+        return redirect(url_for('handle_signin'))
+
+    if request.method == 'POST':
+        sub_name = request.form['sub_name']
+        sub_price = request.form['sub_price']
+        sub_purchase_date = request.form['sub_purchase_date']
+        sub_renewal_date = request.form['sub_renewal_date']
+
+        ######
+        # Need to do a bunch of error handling here at some point - dont use Date for sql or just fuck with the formatting
+        ######
+
+        conn = mysql.connector.connect(**mysql_config)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO {} (sub_name, sub_price, sub_purchase_date, sub_renewal_date) VALUES (\"{}\", {}, \"{}\", {});"
+            .format(session.get('username'), sub_name, sub_price, sub_purchase_date, sub_renewal_date))
+        conn.commit()
+
+        return redirect(url_for('user_data', username=session.get('username')))
+    else:
+        return render_template('add_subscription.html', username=session.get('username'))
+
+@app.route('/logout')
+def logout():
+    session.pop('username')
+    return redirect(url_for('handle_signin'))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')

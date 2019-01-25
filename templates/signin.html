@@ -4,7 +4,7 @@
     <title>Sign In</title>
   </head>
   <body>
-    <h1>This is the home page<h1>
+    <h1>Sign in page<h1>
 
     {% if account_creation %}
         <p>{{ account_creation }}</p>
@@ -14,9 +14,11 @@
         <lable for="signup_username">Username</lable>
         <input type='text' name='signin_username'>
         <br>
+
         <lable for="signup_password">Password</lable>
         <input type='password' name='signin_password'>
         <br>
+
         <input type='submit'>
     </form>
 
@@ -24,6 +26,6 @@
         <p>{{ error_message }}</p>
     {% endif %}
 
-    <p>Are you a new user? <a href="{{ url_for("handle_signup") }}">Click here to create an account</a>
+    <p>Are you a new user? <a href="{{ url_for('handle_signup') }}">Click here to create an account</a>
   </body>
 </html>

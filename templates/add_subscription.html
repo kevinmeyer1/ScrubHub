@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Sub</title>
+  </head>
+  <body>
+    <h1>Add Sub Page</h1>
+
+    <form action="{{ url_for('add_subscription') }}" method='POST'>
+        <lable for="sub_name">Subscription Name</lable>
+        <input type='text' name='sub_name'>
+        <br>
+
+        <lable for="sub_price">Price per Month</lable>
+        <input type='text' name='sub_price'>
+        <br>
+
+        <lable for="sub_purchase_date">Purchase Date</lable>
+        <input type='text' name='sub_purchase_date'>
+        <br>
+
+        <lable for="sub_renewal_date">Renewal Date</lable>
+        <input type='text' name='sub_renewal_date'>
+        <br>
+
+        <input type='submit' value='Add to Profile'>
+    </form>
+  </body>
+</html>
