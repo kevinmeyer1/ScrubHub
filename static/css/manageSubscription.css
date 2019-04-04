@@ -1,0 +1,100 @@
+header {
+	background-color: white;
+}
+
+.createAccount {
+	background-color: black;
+	
+}
+
+#emailLabel,
+#phoneNumberLabel,
+#firstNameLabel,
+#policyCheckLabel,
+#signedUp,
+#rightsLabel,
+.subtitle,
+.step {
+	color: white;
+}
+
+
+.blue,
+.title {
+	color: #007bff;
+}
+
+.btn {
+	width: 250px;
+}
+
+.form-section, .steps {
+	width: 720px;
+}
+
+.steps-section {
+	background-color: black;
+}
+
+#firstName {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+#checkBox {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+#signedUp {
+	padding-top: 30px;
+}
+
+#logInInstead {
+	font-size: 12px;
+}
+
+#step1Icon {
+	width: 50px;
+}
+
+#step2Icon {
+	width: 58px;
+}
+
+#step3Icon {
+	width: 48px;
+}
+
+.arrow {
+	fill: #007bff;
+}
+
+.carousel-slide {
+	width: 37vw;
+	padding-bottom: 30px;
+	margin-top: 15px;
+}
+
+.carousel-indicators {
+	bottom: 160px !important;
+}
+
+
+.carousel-control-next {
+	right: 35px !important;
+}
+
+.carousel-control-prev {
+	left: 35px !important;
+}
+
+.carousel-item {
+	width: 800px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+	width: 60px !important;
+	height: 50px !important;
+}

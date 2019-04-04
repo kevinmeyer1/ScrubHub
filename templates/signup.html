@@ -8,14 +8,22 @@
 
     <!--This will be handle sign -->
     <form action="{{ url_for('handle_signup') }}" method="POST">
-        <lable for="signup_username">Username</lable>
-        <input type='text' name='signup_username'>
+        <label for="username">Username</label>
+        <input type='text' name='username'>
         <br>
 
-        <lable for="signup_password">Password</lable>
-        <input type='password' name='signup_password'>
+        <label for="password">Password</label>
+        <input type='password' name='password'>
         <br>
-        
+
+        <label for="phone_number">Phone Number</label>
+        <input type='password' name='phone_number'>
+        <br>
+
+        <label for="email">Email</label>
+        <input type='password' name='email'>
+        <br>
+
         <input type='submit'>
     </form>
 

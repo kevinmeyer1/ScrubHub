@@ -1,0 +1,75 @@
+header {
+	background-color: white;
+}
+
+.createAccount {
+	background-color: black;
+	
+}
+
+.title {
+	color: #007bff;
+}
+
+#emailLabel,
+#phoneNumberLabel,
+#firstNameLabel,
+#policyCheckLabel,
+#signedUp,
+#rightsLabel {
+	color: white;
+}
+
+.btn {
+	color: #007bff;
+}
+
+.form-section, .steps {
+	width: 720px;
+}
+
+.steps-section {
+	background-color: black;
+}
+
+#firstName {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+#checkBox {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+#signedUp {
+	padding-top: 30px;
+}
+
+#logInInstead {
+	font-size: 12px;
+}
+
+.step {
+	color: white;
+}
+
+#step1Icon {
+	width: 50px;
+}
+
+#step2Icon {
+	width: 58px;
+}
+
+#step3Icon {
+	width: 48px;
+}
+
+.blue {
+	color: #007bff;
+}
+
+.arrow {
+	fill: #007bff;
+}
