@@ -32,12 +32,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="formGroupExampleInput">Amount</label>
-                                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Ex: $500.00">
+                                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Ex: $10.00">
                                       </div>
                                     <div class="form-group">
                                         <label for="exampleFormControlSelect1">Category</label>
                                         <select class="form-control" id="exampleFormControlSelect1" aria-placeholder="Select">
-                                            <option>Select</option>
                                             <option>Entertainment</option>
                                             <option>Education</option>
                                         </select>
@@ -45,15 +44,14 @@
                                     <div class="form-group">
                                         <label for="exampleFormControlSelect1">Reminder Preference</label>
                                         <select class="form-control" id="exampleFormControlSelect1">
-                                            <option>Select</option>
                                             <option>Email</option>
                                             <option>Text</option>
                                         </select>
                                     </div>
                                 </form>
                             <div>
-                                <a href="#" class="btn btn-danger">Cancel</a>
-                                <a href="#" class="btn btn-warning">Hold</a>
+                                <a href="https://www.netflix.com/cancelplan" class="btn btn-danger">Cancel</a>
+                                <input type="button" class="btn btn-warning" value="Hold" disabled>
                                 <a href="{{ url_for('renew_subscription') }}" class="btn btn-success">Renew/Save</a>
                             </div>
                         </div>
