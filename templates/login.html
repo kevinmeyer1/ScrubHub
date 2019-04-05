@@ -12,20 +12,25 @@
 				ScrubHub
 			</h1>
 			<h4>
-				<a href="">Sign Up</a>
+				<a href="{{ url_for('Sign_Up') }}">Sign Up</a>
 			</h4>
 		</header>
 		<main class="d-flex flex-column align-items-center mt-5">
 			<section class="form-section d-flex mt-2">
-				<form action="{url_for('handle_signin')}" method="POST">
+				<form action="{{ url_for('Sign_In') }}" method="POST">
 					<div class="form-group" id="firstName">
 						<label for="inputEmail" id="emailLabel">Email</label>
-						<input type="email" class="form-control" id="inputEmail" placeholder="Enter your email">
+						<input name="email" type="email" class="form-control" id="inputEmail" placeholder="Enter your email">
 					</div>
 					<div class="form-group">
                         <label for="exampleInputPassword1" id="passwordLabel">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
                     </div>
+
+					{% if error_message %}
+						<p style='color: red'>{{ error_message }}</p>
+					{% endif %}
+
 					<div class="form-check" id="checkBox">
 						<input type="checkbox" class="form-check-input" id="exampleCheck1">
 						<label class="form-check-label" for="exampleCheck1" id="policyCheckLabel">I agree to Scrubhub Terms and Conditions</label>
@@ -34,7 +39,7 @@
 					<div class="routeLogIn">
 						<div id="signedUp">Not Signed Up?</div>
 						<div id="logInInstead">
-							<a href="createAccount.html">SIGN UP</a>
+							<a href="{{ url_for('Sign_Up') }}">SIGN UP</a>
 						</div>
 					</div>
 				</form>

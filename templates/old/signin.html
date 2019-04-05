@@ -10,7 +10,7 @@
         <p>{{ account_creation }}</p>
     {% endif %}
 
-    <form action="{{ url_for('handle_signin') }}" method='post'>
+    <form action="{{ url_for('Sign_In') }}" method='post'>
         <lable for="signup_username">Username</lable>
         <input type='text' name='signin_username'>
         <br>
@@ -26,6 +26,6 @@
         <p>{{ error_message }}</p>
     {% endif %}
 
-    <p>Are you a new user? <a href="{{ url_for('handle_signup') }}">Click here to create an account</a>
+    <p>Are you a new user? <a href="{{ url_for('Sign_Up') }}">Click here to create an account</a>
   </body>
 </html>

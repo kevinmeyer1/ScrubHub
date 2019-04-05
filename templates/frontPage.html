@@ -13,7 +13,7 @@
 				ScrubHub
 			</h1>
 			<h4>
-				<a href="{{ url_for('handle_signin') }}">LOG IN</a>
+				<a href="{{ url_for('Sign_In') }}">LOG IN</a>
 			</h4>
 		</header>
 		<section class="d-flex">
@@ -27,10 +27,10 @@
 					Did you know, 84% of people have subscriptions that they've forgotten about. We'll help you easily find those and even help you cancel them!
 				</div>
 				<div class="buttons d-flex mt-5">
-					<form action="{{ url_for('handle_signin')}}" method="GET" style="display: inline">
+					<form action="{{ url_for('Sign_In')}}" method="GET" style="display: inline">
 						<button type="submit" class="btn btn-outline-primary btn-lg mr-3">LOG IN</button>
 					</form>
-					<form action="{{ url_for('handle_signup') }}" method="GET" style="display: inline">
+					<form action="{{ url_for('Sign_Up') }}" method="GET" style="display: inline">
 						<button type="submit" class="btn btn-primary btn-lg">GET STARTED</button>
 					</form>
 				</div>
