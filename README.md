@@ -16,7 +16,7 @@ Now that you have all of the necessary files, install the following things that 
 
 Once all of these are successfully installed, you will need to create a database.
 
-Open MySQL Workbench. Open a local instance of MySQL in the application. Copy and execute the text inside of the 'CreateDatabase.txt' file found in the ScrubHub folder to create the ScrubHub database and tables.
+Open MySQL Workbench. Open a local instance of MySQL in the application. Copy and execute the text inside of the `CreateDatabase.txt` file found in the ScrubHub folder to create the ScrubHub database and tables.
 
 You will need to go into the `config.json` file and update the values labeled `user` and `password`. These values will reflect the username and password that you use to sign into your localhost instance of mysql on your computer.
 
