@@ -37,3 +37,5 @@ You should see the ScrubHub website. Now you can create an account and test ever
 # Warning
 
 The application still has plenty of opportunities for it to crash. Multiple accounts created with the same email may cause some issues. The email and phone number provided during account creation will be used to send texts or emails so make sure you use working emails and phone numbers.
+
+Whenever the application crashes, just hit `CTRL+C` and enter `flask run` and the application will start again.
