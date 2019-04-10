@@ -24,7 +24,7 @@ Once your database, user, and password are all set up, you should be able to `cd
 
 Now you need to set up an environment varaible called `FLASK_APP`. In a linux terminal this can be done by entering `export FLASK_APP=main.py`. I'm not sure how to do it on a Mac. I think `set` is used instead of `export`. What ever method you use, `FLASK_APP=main.py` is needed.
 
-Once your environment varaible is set, run the command 'flask run' in your terminal. Some text should pop up along the lines of:
+Once your environment varaible is set, run the command `flask run` in your terminal. Some text should pop up along the lines of:
 
     Serving Flask app "main.py"
     ~~~~~Some other stuff~~~~~
