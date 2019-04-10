@@ -1,22 +1,23 @@
 from flask import Flask, render_template, request, redirect, url_for, session, app
-import mysql.connector, ssl, smtplib, schedule, time, sys
-from datetime import datetime
+import mysql.connector, ssl, smtplib, sys, json
 from twilio.rest import Client
 
 app = Flask(__name__)
 app.secret_key = 'some secret key?' #This is needed to make my session work. what do i do for this?
 
 #Variables -- database needs to be changed to ScrubHub as reflection of the project name
-mysql_config = {
-    'user': 'Kevin',
-    'password': 'kevin11',
-    'host': 'localhost',
-    'database': 'Scrubhub'
-}
 
-#Variables needed for the texting function
-twilio_sid = 'ACd28df43aa8b7a9d5ffe1fb74d98be3a6'
-twilio_auth_token = '7188d25025fbef6d7838eed5dc1a9e4f'
+#reads variables from config.json file
+with open('./config.json') as json_file:
+    json_data = json.load(json_file)
+
+#sets config values for mysql
+mysql_config = {
+    'user': json_data['user'],
+    'password': json_data['password'],
+    'host': json_data['host'],
+    'database': json_data['database']
+}
 
 #Home page, shows up when you go to localhost:5000
 @app.route('/')
@@ -158,14 +159,14 @@ def renew_subscription():
 
     #Code to be added in the future
 
-    return render_template('homeConfirm.html')
+    return render_template('homeConfirm.html', name=session['name'])
 
 #this is the set 404 page so when a user tries to go somewhere that doesnt exist we can just send them this
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('old/404.html')
 
-#function to demonstrate text capabilites
+#grabs users phone number and sends a text to them
 @app.route('/test_text')
 def test_text():
     conn = mysql.connector.connect(**mysql_config)
@@ -181,9 +182,9 @@ def test_email():
     send_email("[Subscription Placerholder]", session['name'], '[Date Placeholder]', session['email'])
     return redirect(url_for('user_data'))
 
-#this will send a text when called - not actually used in site yet
+#this will send a text when called
 def send_text(phone_number, sub_name, sub_renewal_date):
-    client = Client(twilio_sid, twilio_auth_token)
+    client = Client(json_data['twilio_sid'], json_data['twilio_auth_token'])
     message = client.messages.create(
         body = f"Reminder: Your subscription to {sub_name} is set to renew on {sub_renewal_date}",
         from_ = "+19196291256",
@@ -289,12 +290,4 @@ def get_user_subscriptions():
 
 def cancel_subscription():
     #here we get the subscription, change its active sub field to false or whatever
-
     return
-
-#this stuff runs the check_for_reminders function every day
-#schedule.every().day.do(check_for_reminders)
-
-#i think this is a needed part of the schedule thing, not really sure it was on the internet
-#while True:
-    #schedule.run_pending()

@@ -1,0 +1,24 @@
+Copy the following commands into your mysql (mysql workbench or mysql through the console)
+
+create database Scrubhub;
+
+use scrubhub;
+
+create table users (
+	name varchar(50),
+    email varchar(50),
+    phone_number varchar (50),
+    user_preference varchar (20),
+    primary key (email),
+	password varchar(50) )
+    engine = innodb default charset = latin1;
+
+
+create table subscription (
+	email varchar(50),
+	sub_name char(100),
+    sub_price decimal(9,2),
+    sub_renewal_date varchar(10),
+    notification_type char(10),
+    subuscription_type char(50),
+    active_sub tinyint(1));
