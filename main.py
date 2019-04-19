@@ -51,20 +51,6 @@ def Sign_In():
 @app.route('/Sign_Up', methods=['POST', 'GET'])
 def Sign_Up():
     if request.method == 'POST':
-        #method is post, data is recieved
-        form_username = request.form['username']
-        form_password = request.form['password']
-        form_phone_number = request.form['phone_number']
-        form_email = request.form['email']
-
-        #Add new user to users table
-        conn = mysql.connector.connect(**mysql_config)
-        cur = conn.cursor()
-        #Add other stuff to the table from front end
-        cur.execute(f"INSERT INTO users (username, email, phone_number, password) \
-                      VALUES ('{form_username}', '{form_email}', '{form_phone_number}', '{form_password}');")
-        conn.commit()
-
         #send user back to signin page
         return render_template('frontPage.html')
     else:
@@ -74,12 +60,33 @@ def Sign_Up():
 #saves personal information in signup sequence
 @app.route('/notification_method', methods=['POST'])
 def notification_method():
+    complete = True
+
     name = request.form['name']
     email = request.form['email']
     password = request.form['password']
     phone_number = request.form['phone_number']
+    terms_and_conditions = request.form.get('terms_and_conditions')
 
-    session['personal'] = [name, email, phone_number, password]
+    session['personal'] = [name, email, phone_number, password, terms_and_conditions]
+
+    conn = mysql.connector.connect(**mysql_config)
+    cur = conn.cursor()
+
+    #Check if user already exists
+    cur.execute(f"SELECT * FROM users WHERE email='{email}';")
+    if cur.fetchone():
+        #if it gets a result, the email exists
+        return render_template('createAccount.html', error_message="An account with the previously entered email already exists. Login or use a different email.")
+
+    #make sure all inputs are filled out or checked
+    for x in session['personal']:
+        if x == "":
+            complete = False
+
+    #return user to creat account if there are inputs missing
+    if complete == False:
+        return render_template('createAccount.html', error_message="Please make sure to fill out all inputs and check the terms and conditions box.")
 
     return render_template('notificationMethod.html')
 

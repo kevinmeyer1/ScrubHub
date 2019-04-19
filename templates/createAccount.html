@@ -67,6 +67,11 @@
 			</section>
 			<section class="form-section d-flex mt-2">
 				<form action='{{ url_for('notification_method') }}' method='POST'>
+
+					{% if error_message %}
+						<p style='color: red'>{{ error_message }}</p>
+					{% endif %}
+
 					<div class="form-group">
 						<label for="inputFirstName" id="firstNameLabel">First Name</label>
 						<input name="name" type="name" class="form-control" id="inputFirstName" placeholder="Enter your first name">
@@ -85,7 +90,7 @@
 					</div>
 					<div class="form-check" id="checkBox">
 						<input type="checkbox" class="form-check-input" id="exampleCheck1">
-						<label class="form-check-label" for="exampleCheck1" id="policyCheckLabel">I agree to Scrubhub Terms and Conditions</label>
+						<label name='terms_and_conditions' class="form-check-label" for="exampleCheck1" id="policyCheckLabel">I agree to Scrubhub Terms and Conditions</label>
 					</div>
 					<button type="submit" class="btn btn-primary btn-lg">GET STARTED</button>
 					<div class="routeLogIn">
