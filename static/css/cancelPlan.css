@@ -13,14 +13,10 @@ header {
 	color: #007bff;
 }
 
-#cardManage {
-    width: 300px;
-    height: 200px;
-}
-
 #cardPersonal {
     width: 300px;
-
+    position: absolute;
+    left: 1050px;
 }
 
 .categories {
@@ -36,19 +32,20 @@ header {
     widows: 120px;
 }
 
+#rightsLabel {
+    color: white;
+}
+
+#img1 {
+    width: 20px;
+    height: 20px;
+}
+
 #cardtext1,
 #cardtext2 {
     color: #007bff;
 }
 
-#rightsLabel {
-    color: white;
-}
-
-.manage {
-    min-height: 400px;
-}
-
-table {
-    color: black;
+footer {
+    background-color: black;
 }

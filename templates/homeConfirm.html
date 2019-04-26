@@ -1,11 +1,11 @@
 <html>
-	<head>
-                <link rel="stylesheet" href="../static/css/global.css">
-                <link rel="stylesheet" href="../static/css/home.css">
-                <link rel="stylesheet" href="../static/bootstrap-4.1.3/css/bootstrap.min.css">
-                <link rel="stylesheet" href="../static/bootstrap-4.1.3/js/bootstrap.min.js">
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        </head>
+<head>
+			<link rel="stylesheet" href="../static/css/global.css">
+			<link rel="stylesheet" href="../static/css/home.css">
+			<link rel="stylesheet" href="../static/bootstrap-4.1.3/css/bootstrap.min.css">
+			<link rel="stylesheet" href="../static/bootstrap-4.1.3/js/bootstrap.min.js">
+			<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	</head>
 	<body id="home" class="home">
         <header class="d-flex py-3 px-5 align-items-center justify-content-between">
             <h1 class="title">
@@ -22,7 +22,13 @@
             <div class="div1 mx-5">
                 <div class="manageSub d-flex flex-column">
                     <div class="card" style="width: 32rem;">
-                        <img class="card-img-top" src="../static/images/netflix3.png" alt="Card image cap">
+			{% if sub_name == "Netflix" %}
+	                        <img class="card-img-top" src="../static/images/netflix3.png" alt="Card image cap">
+			{% elif sub_name == "Chegg" %}
+				<img class="card-img-top" src="../static/images/chegg1.jpg" alt="Card image cap">
+			{% else %}
+				<p>{{ sub_name }} </p>
+			{% endif %}
                         <div class="card-body ml-4">
                             <p> You have successully Renewed/Saved your subscription!</p>
                             <div class="d-flex justify-content-center">
@@ -38,21 +44,17 @@
                         <div class="card-body">
                             <img src="../static/images/person.png" alt="" class="person mb-3">
                             <h5 class="card-title mb-2">{{ name }}</h5>
+                            <p class="card-text mb-4">Charlotte, NC</p>
                             <div class="subcard">
-                                <p class="card-text mb-2" id="cardtext1">1 Subscription</p>
-                                <p class="card-text mb-4" id="cardtext2">$15.99 in Subscriptions</p>
+                                <p class="card-text mb-2" id="cardtext1">12 Subscriptions</p>
+                                <p class="card-text mb-4" id="cardtext2">$500.10 in Subscriptions</p>
                             </div>
-                            <a href="#" class="mb-4">User Settings</a>
+                            <a href="{{ url_for('user_settings') }}" class="mb-4">User Settings</a>
                         </div>
                         <div class="card-footer text-muted">
                             <a href="#" class="btn btn-primary">Expand</a>
                         </div>
                     </div>
-                </div>
-                <div class="text-center">
-                        <br>
-                        <br>
-                        <a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a>
                 </div>
             </div>
         <main>

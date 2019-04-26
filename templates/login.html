@@ -11,9 +11,11 @@
 			<h1 class="title">
 				ScrubHub
 			</h1>
-			<h4>
-				<a href="{{ url_for('Sign_Up') }}">Sign Up</a>
-			</h4>
+			<h3 class="SignUp">
+				<form action="{{ url_for('Sign_Up') }}" method="get">
+					<button type="submit" id="signUpBtn" class="btn btn-outline-primary">Signup</button>
+				</form>
+			</h3>
 		</header>
 		<main class="d-flex flex-column align-items-center mt-5">
 			<section class="form-section d-flex mt-2">

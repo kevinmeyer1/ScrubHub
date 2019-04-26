@@ -1,12 +1,12 @@
 <html>
-	<head>
-		<link rel="stylesheet" href="../static/css/global.css">
-		<link rel="stylesheet" href="../static/css/homeManage.css">
-		<link rel="stylesheet" href="../static/bootstrap-4.1.3/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../static/css/bootstrap-4.1.3/js/bootstrap.min.js">
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<head>
+	<link rel="stylesheet" href="../static/css/global.css">
+	<link rel="stylesheet" href="../static/css/homeManage.css">
+	<link rel="stylesheet" href="../static/bootstrap-4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/css/bootstrap-4.1.3/js/bootstrap.min.js">
+			<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-	</head>
+</head>
 	<body id="home" class="home">
         <header class="d-flex py-3 px-5 align-items-center justify-content-between">
             <h1 class="title">
@@ -23,37 +23,59 @@
             <div class="div1 mx-5">
                 <div class="manageSub d-flex flex-column">
                     <div class="card" style="width: 32rem;">
-                        <img class="card-img-top" src="../static/images/netflix3.png" alt="Card image cap">
+			{% if sub_name == "Netflix" %}
+	                       <img class="card-img-top" src="../static/images/netflix3.png" alt="Card image cap">
+			{% elif sub_name == "Chegg" %}
+				<img class="card-img-top" src="../static/images/chegg1.jpg" alt="Card image cap">
+			{% else %}
+                                <h3 class="text-center" style="margin-top: 15px;"> {{ sub_name }} </h3>
+                        {% endif %}
                         <div class="card-body">
-                                <form>
+                                <form action='{{ url_for('renew_subscription') }}' method='POST'>
+                                    <input type="hidden" value="{{ sub_name }}" name="sub_name">
                                     <div class="form-group">
                                         <label for="renewalDate">Renewal Date</label>
-                                        <input type="date" class="form-control" id="renewalDate" aria-describedby="emailHelp">
+                                        <input type="date" class="form-control" id="renewalDate" aria-describedby="emailHelp" name="sub_renewal_date">
                                     </div>
                                     <div class="form-group">
-                                        <label for="formGroupExampleInput">Amount</label>
-                                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Ex: $10.00">
+                                         {% if sub_name == "Netflix" %}
+                                          <label for="formGroupExampleInput">Select Plan</label>
+					<select class="form-control" id="formGroupExampleInput" name="sub_price">
+						<option value="8.99">Basic - $8.99</option>
+						<option value="12.99">Standard - $12.99</option>
+						<option value="15.99">Premium - $15.99</option>
+					</select>
+                                        {% elif sub_name == "Chegg" %}
+                                         <label for="formGroupExampleInput">Select Plan</label>
+                                        <select class="form-control" id="formGroupExampleInput" name="sub_price">
+						<option value="14.99">Standard - $14.99</option>
+					</select>
+                                        {% else %}
+                                         <label for="formGroupExampleInput">Enter Amount</label>
+                                         <input type="text" name="sub_price" class="form-control" placeholder="Ex. 14.99">
+                                        {% endif %}
                                       </div>
                                     <div class="form-group">
                                         <label for="exampleFormControlSelect1">Category</label>
-                                        <select class="form-control" id="exampleFormControlSelect1" aria-placeholder="Select">
-                                            <option>Entertainment</option>
-                                            <option>Education</option>
+                                        <select class="form-control" id="exampleFormControlSelect1" aria-placeholder="Select" name="sub_type">
+                                            <option value="Entertainment">Entertainment</option>
+                                            <option value="Education">Education</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleFormControlSelect1">Reminder Preference</label>
-                                        <select class="form-control" id="exampleFormControlSelect1">
-                                            <option>Email</option>
-                                            <option>Text</option>
+                                        <select class="form-control" id="exampleFormControlSelect1" name="notification_type">
+                                            <option value="Email">Email</option>
+                                            <option value="Text">Text</option>
                                         </select>
                                     </div>
-                                </form>
-                            <div>
-                                <a href="https://www.netflix.com/cancelplan" class="btn btn-danger">Cancel</a>
-                                <input type="button" class="btn btn-warning" value="Hold" disabled>
-                                <a href="{{ url_for('renew_subscription') }}" class="btn btn-success">Renew/Save</a>
-                            </div>
+
+                                    <div>
+                                            <a href="{{ url_for('cancel_subscription', sub_name=sub_name) }}" class="btn btn-danger">Cancel</a>
+                                            <input type="button" class="btn btn-warning" value="Hold" disabled>
+                                            <button type='submit' class="btn btn-success">Renew/Save</button>
+                                    </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -64,11 +86,12 @@
                         <div class="card-body">
                             <img src="../static/images/person.png" alt="" class="person mb-3">
                             <h5 class="card-title mb-2">{{ name }}</h5>
+                            <p class="card-text mb-4">Charlotte, NC</p>
                             <div class="subcard">
-                                <p class="card-text mb-2" id="cardtext1">1 Subscription</p>
-                                <p class="card-text mb-4" id="cardtext2">$15.99 in Subscriptions</p>
+                                    <p class="card-text mb-2" id="cardtext1">{{ total_subs }} Subscriptions</p>
+                                    <p class="card-text mb-4" id="cardtext2">${{ total_sub_amount }} in Subscriptions</p>
                             </div>
-                            <a href="#" class="mb-4">User Settings</a>
+                            <a href="{{ url_for('user_settings') }}" class="mb-4">User Settings</a>
                         </div>
                         <div class="card-footer text-muted">
                             <a href="#" class="btn btn-primary">Expand</a>

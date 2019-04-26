@@ -1,0 +1,71 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="../static/css/global.css">
+		<link rel="stylesheet" href="../static/css/cancelPlan.css">
+		<link rel="stylesheet" href="../static/bootstrap-4.1.3/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../static/css/bootstrap-4.1.3/js/bootstrap.min.js">
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	</head>
+	<body id="home" class="home">
+        <header class="d-flex py-3 px-5 align-items-center justify-content-between">
+            <h1 class="title">
+                ScrubHub
+            </h1>
+            <h4 class="subtitle">
+                Hello, {{ name }}
+            </h4>
+        </header>
+        <div class="labels1 d-flex justify-content-between align-items-center mx-5 my-3">
+            Cancel Your Subscription
+        </div>
+        <main class="d-flex mt-3">
+
+            <div>
+		{% if sub_name == "Netflix" %}
+	               <iframe style="height: 800px; width: 900px; position: absolute; left: 50px;" id="cancel_iframe" src="https://www.netflix.com/cancelplan"></iframe>
+		{% elif sub_name == "Chegg" %}
+			<iframe style="height: 800px; width: 900px; position: absolute; left: 50px;" id="cancel_iframe" src="https://www.chegg.com/my/account"></iframe>
+		{% else %}
+                        <p> not sure what to do here</p>
+		{% endif %}
+            </div>
+            <div class="div2 ml-5">
+                <div class="personal">
+                    <div class="card text-center" id="cardPersonal">
+                        <div class="card-body">
+                            <img src="../static/images/person.png" alt="" class="person mb-3">
+                            <h5 class="card-title mb-2">{{ name }}</h5>
+                            <div class="subcard">
+								<p class="card-text mb-2" id="cardtext1">{{ total_subs }} Subscriptions</p>
+			                    <p class="card-text mb-4" id="cardtext2">${{ total_sub_amount }} in Subscriptions</p>
+                            </div>
+                            <a href="{{ url_for('user_settings') }}" class="mb-4">User Settings</a>
+                        </div>
+                        <div class="text-center text-muted">
+                                <a href="{{ url_for('logout') }}" style="margin-bottom: 30px; margin-top: 10px;" class="btn btn-primary">Logout</a>
+                        </div>
+
+                        <div class="text-center card-footer text-muted">
+                                <a href="{{ url_for('user_data') }}" style="margin-bottom: 10px; margin-top: 10px;" class="btn btn-primary">Home</a>
+                        </div>
+
+                        <div class="text-center card-footer text-muted">
+                                <a href="{{ url_for('confirm_cancel', sub_name=sub_name) }}" style="margin-bottom: 10px; margin-top: 10px;" class="btn btn-primary">Confirm Cancel</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        <main>
+		<footer class="footer fixed-bottom">
+			<nav class="nav d-flex justify-content-center">
+				<a class="nav-link" href="#">About Us</a>
+				<a class="nav-link" href="#">Security</a>
+				<a class="nav-link" href="#">Terms of Service</a>
+				<a class="nav-link" href="#">Social Media</a>
+				<a class="nav-link" id="rightsLabel">Copyright 2019 ScrubHub All Rights Reserved Charlotte, NC</a>
+			</nav>
+		</footer>
+	</body>
+</html>

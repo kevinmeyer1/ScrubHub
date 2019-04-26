@@ -11,6 +11,11 @@ header {
 	color: #007bff;
 }
 
+#loginBtn {
+	width: 150px;
+	font-size: 20px;
+}
+
 #emailLabel,
 #phoneNumberLabel,
 #firstNameLabel,
@@ -26,6 +31,10 @@ header {
 
 .form-section, .steps {
 	width: 720px;
+}
+
+.form-section {
+	min-height: 700px;
 }
 
 .steps-section {

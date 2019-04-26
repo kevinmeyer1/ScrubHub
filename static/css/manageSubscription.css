@@ -7,6 +7,11 @@ header {
 	
 }
 
+#loginBtn {
+	width: 150px;
+	font-size: 20px;
+}
+
 #emailLabel,
 #phoneNumberLabel,
 #firstNameLabel,
@@ -97,4 +102,5 @@ header {
 .carousel-control-next-icon {
 	width: 60px !important;
 	height: 50px !important;
+	margin-top: 90px !important;
 }

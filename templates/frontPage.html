@@ -1,20 +1,22 @@
 <html>
-	<head>
-		<link rel="stylesheet" href="../static/css/global.css">
-		<link rel="stylesheet" href="../static/css/frontPage.css">
-		<link rel="stylesheet" href="../static/bootstrap-4.1.3/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../static/bootstrap-4.1.3/js/bootstrap.min.js">
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<head>
+	<link rel="stylesheet" href="../static/css/global.css">
+	<link rel="stylesheet" href="../static/css/frontPage.css">
+	<link rel="stylesheet" href="../static/bootstrap-4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/bootstrap-4.1.3/js/bootstrap.min.js">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-	</head>
+</head>
 	<body id="login" class="login">
 		<header class="d-flex py-3 px-5 align-items-center justify-content-between">
 			<h1 class="title">
 				ScrubHub
 			</h1>
-			<h4>
-				<a href="{{ url_for('Sign_In') }}">LOG IN</a>
-			</h4>
+			<h3>
+				<form action="{{ url_for('Sign_In') }}" method="get">
+					<button type="button" id="loginBtn" class="btn btn-outline-primary">Log In</button>
+				</form>
+			</h3>
 		</header>
 		<section class="d-flex">
 			<div class="subheading d-flex align-items-start flex-column p-5">
@@ -27,10 +29,10 @@
 					Did you know, 84% of people have subscriptions that they've forgotten about. We'll help you easily find those and even help you cancel them!
 				</div>
 				<div class="buttons d-flex mt-5">
-					<form action="{{ url_for('Sign_In')}}" method="GET" style="display: inline">
+					<form action="{{ url_for('Sign_In')}}" method="GET">
 						<button type="submit" class="btn btn-outline-primary btn-lg mr-3">LOG IN</button>
 					</form>
-					<form action="{{ url_for('Sign_Up') }}" method="GET" style="display: inline">
+					<form action="{{ url_for('Sign_Up') }}" method="GET">
 						<button type="submit" class="btn btn-primary btn-lg">GET STARTED</button>
 					</form>
 				</div>

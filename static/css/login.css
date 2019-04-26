@@ -11,6 +11,11 @@ header {
 	color: #007bff;
 }
 
+#signUpBtn {
+	width: 150px;
+	font-size: 20px;
+}
+
 #emailLabel,
 #passwordLabel,
 #firstNameLabel,
@@ -74,4 +79,7 @@ header {
 	fill: #007bff;
 }
 
+.loginHeader {
+	color: #007bff;
+}
 

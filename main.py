@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, app
 import mysql.connector, ssl, smtplib, sys, json
+from decimal import *
 from twilio.rest import Client
 
 app = Flask(__name__)
@@ -31,6 +32,9 @@ def Sign_In():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+
+        if email == "" or password == "":
+            return render_template('login.html', error_message="Missing required values.")
 
         conn = mysql.connector.connect(**mysql_config)
         cur = conn.cursor()
@@ -93,7 +97,7 @@ def notification_method():
 #saves notif method in signup sequence
 @app.route('/select_subscriptions', methods=['POST'])
 def select_subscriptions():
-    notification_method = request.form['notification_method']
+    notification_method = "text"
     session['notification_method'] = notification_method
     return render_template('manageSubscription.html')
 
@@ -109,6 +113,8 @@ def user_data():
         session['name'] = session['personal'][0]
         cur.execute(f"INSERT INTO users VALUES ('{session['personal'][0]}', '{session['personal'][1]}', '{session['personal'][2]}', '{session['notification_method']}', '{session['personal'][3]}')")
         conn.commit()
+        cur.execute(f"INSERT INTO subscription VALUES ('{session['email']}', 'Netflix', '8.99', '1/1', 'Text', 'Entertainment', 1);")
+        conn.commit()
         session.pop('personal')
         session.pop('notification_method')
 
@@ -118,8 +124,11 @@ def user_data():
     cur.execute(f"SELECT * FROM subscription where email='{session['email']}';")
     data = cur.fetchall()
 
+    profile = get_user_profile()
     #sends all user data to the user.html page
-    return render_template('home.html', data=data, email=session['email'], name=session['name'])
+    return render_template('home.html', data=data, email=session['email'], name=session['name'], entertainment_amount=profile[0],
+        education_amount=profile[1], total_sub_amount=profile[2], total_subs=profile[3], active_subs=profile[4], entertainment_subs=profile[5],
+        education_subs=profile[6])
 
 #adds a subscription - simplified for now
 @app.route('/add_subscription', methods=['POST', 'GET'])
@@ -133,16 +142,17 @@ def add_subscription():
         sub_renewal_date = request.form['sub_renewal_date']
         notification_type = request.form['notification_type']
         subscription_type = request.form['sub_type']
-        active_sub = 1
 
         conn = mysql.connector.connect(**mysql_config)
         cur = conn.cursor()
         cur.execute(f"INSERT INTO subscription VALUES ('{session['email']}', '{sub_name}', {sub_price}, {sub_renewal_date}, '{notification_type}', '{subscription_type}', 1);")
         conn.commit()
 
-        return redirect(url_for('user_data', email=session['email']))
+        return redirect(url_for('user_data', email=session['email'], name=session['name']))
     else:
-        return render_template('newSubscription.html', email=session['email'])
+        amounts = get_user_profile()
+        return render_template('newSubscription.html', email=session['email'], name=session['name'], entertainment_amount=amounts[0],
+            education_amount=amounts[1], total_sub_amount=amounts[2], total_subs=amounts[3])
 
 #log out function, logs them out and sends them back to signin page. removes identification from session
 @app.route('/logout')
@@ -153,25 +163,34 @@ def logout():
     return redirect(url_for('home'))
 
 #takes user to manage a single subscription
-@app.route('/manage_subscription')
-def manage_subscription():
-
+@app.route('/manage_subscription/<sub_name>')
+def manage_subscription(sub_name):
     #code to be added in the future
-
-    return render_template('homeManage.html', name=session['name'])
+    amounts = get_user_profile()
+    return render_template('homeManage.html', name=session['name'], entertainment_amount=amounts[0],
+        education_amount=amounts[1], total_sub_amount=amounts[2], total_subs=amounts[3], sub_name=sub_name)
 
 #response from confirm/renew button in manage page
-@app.route('/confirm_renewal')
+@app.route('/confirm_renewal', methods=['POST', 'GET'])
 def renew_subscription():
 
+    if request.method == "POST":
+        sub_name = request.form['sub_name']
+        sub_price = request.form['sub_price']
+        sub_renewal_date = request.form['sub_renewal_date']
+        notification_type = request.form['notification_type']
+        subscription_type = request.form['sub_type']
+        active_sub = 1
+
+        conn = mysql.connector.connect(**mysql_config)
+        cur = conn.cursor()
+        cur.execute(f"DELETE FROM subscription WHERE email='{session['email']}' AND sub_name='{sub_name}';")
+        conn.commit()
+        cur.execute(f"INSERT INTO subscription VALUES ('{session['email']}', '{sub_name}', {sub_price}, {sub_renewal_date}, '{notification_type}', '{subscription_type}', 1);")
+        conn.commit()
     #Code to be added in the future
 
     return render_template('homeConfirm.html', name=session['name'])
-
-#this is the set 404 page so when a user tries to go somewhere that doesnt exist we can just send them this
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('old/404.html')
 
 #grabs users phone number and sends a text to them
 @app.route('/test_text')
@@ -188,6 +207,117 @@ def test_text():
 def test_email():
     send_email("[Subscription Placerholder]", session['name'], '[Date Placeholder]', session['email'])
     return redirect(url_for('user_data'))
+
+@app.route('/settings')
+def user_settings():
+    return render_template('userSettings.html', name=session['name'])
+
+@app.route('/cancelplan/<sub_name>')
+def cancel_subscription(sub_name):
+    amounts = get_user_profile()
+    return render_template('cancelPlan.html', name=session['name'], entertainment_amount=amounts[0],
+        education_amount=amounts[1], total_sub_amount=amounts[2], total_subs=amounts[3], sub_name=sub_name)
+
+@app.route('/password_change', methods=['POST'])
+def change_password():
+    new_password = request.form['new_password']
+    confirm_password = request.form['confirm_password']
+
+    if (new_password == "" or confirm_password == ""):
+        password_error_message = "Please fill out both inputs."
+        return render_template('userSettings.html', password_error_message=password_error_message)
+
+    if (new_password != confirm_password):
+        password_error_message = "Passwords do not match."
+        return render_template('userSettings.html', password_error_message=password_error_message)
+
+    conn = mysql.connector.connect(**mysql_config)
+    cur = conn.cursor()
+    cur.execute(f"UPDATE users SET password='{new_password}' WHERE email='{session['email']}';")
+    conn.commit()
+    return redirect(url_for('user_data'))
+    return
+
+@app.route('/email_change', methods=['POST'])
+def change_email():
+    new_email = request.form['new_email']
+    confirm_email = request.form['confirm_email']
+
+    if (new_email == "" or confirm_email == ""):
+        email_error_message = "Please fill out both inputs."
+        return render_template('userSettings.html', email_error_message=email_error_message)
+
+    if (new_email != confirm_email):
+        email_error_message = "Emails do not match."
+        return render_template('userSettings.html', email_error_message=email_error_message)
+
+    conn = mysql.connector.connect(**mysql_config)
+    cur = conn.cursor()
+
+    cur.execute(f"SELECT * FROM users WHERE email='{new_email}';")
+    if cur.fetchone():
+        email_error_message="An account with the previously entered email already exists. Please use a different email."
+        return render_template('userSettings.html', email_error_message=email_error_message)
+
+    cur.execute(f"UPDATE users SET email='{new_email}' WHERE email='{session['email']}';")
+    session['email'] = new_email
+
+    conn.commit()
+    return redirect(url_for('user_data'))
+
+@app.route('/confirm_cancel/<sub_name>')
+def confirm_cancel(sub_name):
+    conn = mysql.connector.connect(**mysql_config)
+    cur = conn.cursor()
+    cur.execute(f"UPDATE subscription SET active_sub=0 WHERE email='{session['email']}' AND sub_name='{sub_name}'")
+    conn.commit()
+
+    return redirect(url_for('user_data'))
+
+@app.route('/delete/<sub_name>')
+def delete_subscription(sub_name):
+    conn = mysql.connector.connect(**mysql_config)
+    cur = conn.cursor()
+    cur.execute(f"DELETE FROM subscription WHERE email='{session['email']}' AND sub_name='{sub_name}'")
+    conn.commit()
+    return redirect(url_for('user_data'))
+
+#gets total number of subs and amounts for each sub type
+def get_user_profile():
+    entertainment_amount = Decimal(0.00)
+    education_amount = Decimal(0.00)
+    total_sub_amount = Decimal(0.00)
+    total_subs = 0
+    active_subs = []
+    entertainment_subs = []
+    education_subs = []
+    #these are the only two things we have as of now
+
+    conn = mysql.connector.connect(**mysql_config)
+    cur = conn.cursor()
+
+    cur.execute(f"SELECT * FROM subscription WHERE email='{session['email']}';")
+    sub_data = cur.fetchall()
+
+    for row in sub_data:
+        if (row[6] == 1):
+            active_subs.append(row)
+
+            if (row[5] == "Entertainment"):
+                entertainment_amount += Decimal(row[2])
+                entertainment_subs.append(row)
+            elif (row[5] == "Education"):
+                education_amount += Decimal(row[2])
+                education_subs.append(row)
+            total_sub_amount += Decimal(row[2])
+            total_subs += 1
+        else:
+            if (row[5] == "Entertainment"):
+                entertainment_subs.append(row)
+            elif (row[5] == "Education"):
+                education_subs.append(row)
+
+    return (entertainment_amount, education_amount, total_sub_amount, total_subs, active_subs, entertainment_subs, education_subs)
 
 #this will send a text when called
 def send_text(phone_number, sub_name, sub_renewal_date):
@@ -221,80 +351,3 @@ def send_email(sub_name, name, sub_renewal_date, email_address):
         server.login(sender_email, password)
         server.sendmail(sender_email, email_address, message)
         server.quit()
-
-
-#-------------------------------------------------------------------------------------------------
-#           UNUSED FUNCTIONS BELOW - POSSIBLE IMPLEMENTATION OPTIONS
-#-------------------------------------------------------------------------------------------------
-
-##### Here we will keep our list of subscription types - eh maybe not, that might be done within the html
-def get_sub_type(name):
-    type = ""
-    educational = ['chegg', 'zybooks'] # lists imcomplete - probably a bad idea
-    entertainment = ['netflix', 'hulu', 'amazon']
-
-    if name in educational:
-        type = 'Education'
-    elif name in entertainment:
-        type = 'Entertainment'
-    else:
-        type = 'Other'
-
-    return type
-
-# here we check each day if users in our database have subscriptions that are renewing soon, if so we send them an email or text
-def check_for_reminders():
-    conn = mysql.connector.connect(**mysql_config)
-    cur = conn.cursor()
-
-    cur.execute('SELECT username FROM users;')
-    data = cur.fetchall()
-    for row in data:
-        '''
-        here Im going to get each usesrname in our users table
-        then for each username, im going to call their table and grab their subscriptions and renewal dates
-        if the renewal date is one day from today, it will send them a reminder
-        if they match up, i use the method of reminder to either
-        send_text() or send_email()
-        '''
-    return
-
-# here we get all personal user information, name, location, profile picture, so we can send it to the front end for it to display
-#we also grab and add up the amounts for each of our sub types
-def get_user_profile():
-    entertainment_amount = 0;
-    education_amount = 0;
-    #these are the only two things we have as of now
-
-    conn = mysql.connector.connect(**mysql_config)
-    cur = conn.cursor()
-
-    cur.execute(f"SELECT * FROM users WHERE email='{session['email']}';")
-    user_data = cur.fetchall()
-    #this is all of the users personal information
-
-    cur.execute(f"SELECT * FROM subscription WHERE email='{session['email']}';")
-    sub_data = cur.fetchall()
-
-    for row in sub_data:
-        if (row[6] == "entertainment"):
-            entertainment_amount += row[2]
-        elif (row[6] == "education"):
-            education_amount += row[2]
-
-    return (user_data, entertainment_amount, education_amount)
-
-#Get a list of all of the subscriptions a user has.
-def get_user_subscriptions():
-    conn = mysql.connector.connect(**mysql_config)
-    cur = conn.cursor()
-
-    cur.execute(f"SELECT sub_name FROM subscription where email='{session['email']}';")
-    sub_data = cur.fetchall()
-
-    return sub_data
-
-
-def cancel_subscription():
-    #here we get the subscription, change its active sub field to false or whatever
-    return

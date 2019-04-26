@@ -36,19 +36,32 @@ header {
     widows: 120px;
 }
 
+#rightsLabel {
+    color: white;
+}
+
+#img1 {
+    width: 20px;
+    height: 20px;
+}
+
 #cardtext1,
 #cardtext2 {
     color: #007bff;
 }
 
-#rightsLabel {
-    color: white;
+footer {
+    background-color: black;
 }
 
-.manage {
-    min-height: 400px;
+.manageSub {
+    min-height: 900px;
 }
 
-table {
-    color: black;
+#manageCard {
+    min-width: 1000px !important;
+}
+
+.card-title {
+    color: #007bff !important;
 }
