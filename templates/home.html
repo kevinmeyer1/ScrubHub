@@ -123,9 +123,9 @@
                                         {% if sub[1] == 'Netflix' %}
                                                 <img class="card-img-top" src="../static/images/netflix4.png" alt="Card image cap">
                                         {% elif sub[1] == 'Chegg' %}
-                                                <img class="card-img-top" src="../static/images/chegg1.jpg" alt="Card image cap">
+                                                <img class="card-img-top" src="../static/images/chegg1.jpg" alt="Card image cap" style="height: 160px; width: 200px;">
                                         {% else %}
-                                                <p style="margin-top: 15px;">{{ sub[1] }}</p>
+                                                <h2 style="margin-top: 15px; height: 137px; width: 200px; text-align: center">{{ sub[1] }}</h2>
                                         {% endif %}
                                         <div class="card-body">
                                             <a href="{{ url_for('manage_subscription', sub_name=sub[1]) }}" class="btn btn-primary manage-btn">Manage</a>

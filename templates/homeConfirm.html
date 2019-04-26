@@ -21,15 +21,15 @@
         <main class="d-flex mt-3">
             <div class="div1 mx-5">
                 <div class="manageSub d-flex flex-column">
-                    <div class="card" style="width: 32rem;">
-			{% if sub_name == "Netflix" %}
-	                        <img class="card-img-top" src="../static/images/netflix3.png" alt="Card image cap">
-			{% elif sub_name == "Chegg" %}
-				<img class="card-img-top" src="../static/images/chegg1.jpg" alt="Card image cap">
-			{% else %}
-				<p>{{ sub_name }} </p>
-			{% endif %}
-                        <div class="card-body ml-4">
+                    <div class="card text-center" style="width: 32rem;">
+						{% if sub_name == "Netflix" %}
+				            <img class="card-img-top" src="../static/images/netflix3.png" alt="Card image cap">
+						{% elif sub_name == "Chegg" %}
+							<img class="card-img-top" src="../static/images/chegg1.jpg" alt="Card image cap">
+						{% else %}
+							<h2 style="text-align: center; margin-top: 20px;">{{ sub_name }} </h2>
+						{% endif %}
+                        <div class="card-body ml-4 ">
                             <p> You have successully Renewed/Saved your subscription!</p>
                             <div class="d-flex justify-content-center">
                                 <a href="{{ url_for('user_data') }}" class="btn btn-primary">Home</a>
@@ -46,8 +46,8 @@
                             <h5 class="card-title mb-2">{{ name }}</h5>
                             <p class="card-text mb-4">Charlotte, NC</p>
                             <div class="subcard">
-                                <p class="card-text mb-2" id="cardtext1">12 Subscriptions</p>
-                                <p class="card-text mb-4" id="cardtext2">$500.10 in Subscriptions</p>
+				<p class="card-text mb-2" id="cardtext1">{{ total_subs }} Subscriptions</p>
+	                        <p class="card-text mb-4" id="cardtext2">${{ total_sub_amount }} in Subscriptions</p>
                             </div>
                             <a href="{{ url_for('user_settings') }}" class="mb-4">User Settings</a>
                         </div>
