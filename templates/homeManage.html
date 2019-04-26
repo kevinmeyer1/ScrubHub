@@ -31,6 +31,10 @@
                                 <h3 class="text-center" style="margin-top: 15px;"> {{ sub_name }} </h3>
                         {% endif %}
                         <div class="card-body">
+        			{% if renewal_error != "" %}
+        				<p style="color: red;">{{ renewal_error }}</p>
+        			{% endif %}
+
                                 <form action='{{ url_for('renew_subscription') }}' method='POST'>
                                     <input type="hidden" value="{{ sub_name }}" name="sub_name">
                                     <div class="form-group">
@@ -40,11 +44,11 @@
                                     <div class="form-group">
                                          {% if sub_name == "Netflix" %}
                                           <label for="formGroupExampleInput">Select Plan</label>
-					<select class="form-control" id="formGroupExampleInput" name="sub_price">
-						<option value="8.99">Basic - $8.99</option>
-						<option value="12.99">Standard - $12.99</option>
-						<option value="15.99">Premium - $15.99</option>
-					</select>
+        					<select class="form-control" id="formGroupExampleInput" name="sub_price">
+        						<option value="8.99">Basic - $8.99</option>
+        						<option value="12.99">Standard - $12.99</option>
+        						<option value="15.99">Premium - $15.99</option>
+        					</select>
                                         {% elif sub_name == "Chegg" %}
                                          <label for="formGroupExampleInput">Select Plan</label>
                                         <select class="form-control" id="formGroupExampleInput" name="sub_price">

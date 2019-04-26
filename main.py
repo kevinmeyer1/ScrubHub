@@ -165,10 +165,16 @@ def logout():
 #takes user to manage a single subscription
 @app.route('/manage_subscription/<sub_name>')
 def manage_subscription(sub_name):
-    #code to be added in the future
     amounts = get_user_profile()
-    return render_template('homeManage.html', name=session['name'], entertainment_amount=amounts[0],
-        education_amount=amounts[1], total_sub_amount=amounts[2], total_subs=amounts[3], sub_name=sub_name)
+
+    if session.get('renewal_error'):
+        renewal_error = session['renewal_error']
+        session.pop('renewal_error')
+        return render_template('homeManage.html', name=session['name'], entertainment_amount=amounts[0],
+            education_amount=amounts[1], total_sub_amount=amounts[2], total_subs=amounts[3], sub_name=sub_name, renewal_error=renewal_error)
+    else:
+        return render_template('homeManage.html', name=session['name'], entertainment_amount=amounts[0],
+            education_amount=amounts[1], total_sub_amount=amounts[2], total_subs=amounts[3], sub_name=sub_name)
 
 #response from confirm/renew button in manage page
 @app.route('/confirm_renewal', methods=['POST', 'GET'])
@@ -181,6 +187,10 @@ def renew_subscription():
         notification_type = request.form['notification_type']
         subscription_type = request.form['sub_type']
         active_sub = 1
+
+        if (sub_name == "" or sub_price == "" or sub_renewal_date == "" or notification_type == "" or subscription_type == ""):
+            session['renewal_error'] = "Please fill out all of the fields before submitting."
+            return redirect(url_for('manage_subscription', sub_name=sub_name))
 
         conn = mysql.connector.connect(**mysql_config)
         cur = conn.cursor()
