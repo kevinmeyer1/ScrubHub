@@ -12,9 +12,11 @@
 			<h1 class="title">
 				ScrubHub
 			</h1>
-			<h4>
-				<a href="{{ url_for('Sign_In') }}">LOG IN</a>
-			</h4>
+			<h3>
+				<form action="{{ url_for('Sign_In') }}" method="get">
+					<button type="button" id="loginBtn" class="btn btn-outline-primary">Log In</button>
+				</form>
+			</h3>
 		</header>
 		<main class="d-flex flex-column align-items-center">
 			<section class="steps-section d-flex py-3 w-100 justify-content-center">
