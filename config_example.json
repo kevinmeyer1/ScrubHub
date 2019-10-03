@@ -1,0 +1,9 @@
+{
+    "user": "" ,
+    "password": "",
+    "host": "",
+    "database": "",
+    "twilio_sid": "" ,
+    "twilio_auth_token": "",
+    "email_password": ""
+}

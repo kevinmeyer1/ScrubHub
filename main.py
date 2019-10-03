@@ -340,7 +340,7 @@ def send_text(phone_number, sub_name, sub_renewal_date):
 #this will send an email when called - not actually used in site yet
 def send_email(sub_name, name, sub_renewal_date, email_address):
     port = 465 #i can probably change this who knows
-    password = 'kPm130806!' #password for scrubhubreminders@gmail.com
+    password = json_data['email_password'] #password for scrubhubreminders@gmail.com
     smtp_server = "smtp.gmail.com" #this is needed and doesnt change
     sender_email = 'ScrubHubReminders@gmail.com'
     message = f"""\

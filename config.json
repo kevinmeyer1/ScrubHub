@@ -4,5 +4,6 @@
     "host": "localhost",
     "database": "Scrubhub",
     "twilio_sid": "ACd28df43aa8b7a9d5ffe1fb74d98be3a6" ,
-    "twilio_auth_token": "7188d25025fbef6d7838eed5dc1a9e4f"
+    "twilio_auth_token": "7188d25025fbef6d7838eed5dc1a9e4f",
+    "email_password": "kPm130806!"
 }
